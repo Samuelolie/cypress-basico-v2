@@ -1,7 +1,7 @@
 Cypress.Commands.add('fillMandatoryFieldsAndSubmit', () => {
-    cy.get('#firstName').type('Samuel')
-    cy.get('#lastName').type('de Oliveira')
-    cy.get('#email').type('samuoliveira1711@gmail.com')
+    cy.get('#firstName').type('nome')
+    cy.get('#lastName').type('sobreNome')
+    cy.get('#email').type('email@gmail.com')
     cy.get('#open-text-area').type('Obrigado Pela Ajuda Walmyr')
     cy.get('.button').click()
 
