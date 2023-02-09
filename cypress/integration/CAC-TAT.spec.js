@@ -9,13 +9,7 @@ describe('Central de Atendimento ao Cliente TAT', () => {
         cy.title().should('be.equal', 'Central de Atendimento ao Cliente TAT')
     })
     it('preenche os campos obrigatórios e envia o formulário', () => {
-        cy.get('#firstName').type('Samuel')
-        cy.get('#lastName').type('de Oliveira')
-        cy.get('#email').type('samuoliveira1711@gmail.com')
-        cy.get('#open-text-area').type('Obrigado Pela Ajuda Walmyr')
-        cy.get('.button').click()
-
-        cy.get('.success').should('be.visible')
+        cy.fillMandatoryFieldsAndSubmit()
     });
     it('exibe mensagem de erro ao submeter o formulário com um email com formatação inválida', () => {
         cy.get('#firstName').type('Samuel')
@@ -24,7 +18,7 @@ describe('Central de Atendimento ao Cliente TAT', () => {
         cy.get('#open-text-area').type('Obrigado Pela Ajuda Walmyr')
         cy.get('.button').click()
 
-        cy.get('.error').should('be.visible')
+        cy.get('.error').contains('Valide os campos obrigatórios!').should('be.visible')
     });
     it('digita número telefônico inválido', () => {
         cy.get('#phone-checkbox').click()
@@ -38,7 +32,7 @@ describe('Central de Atendimento ao Cliente TAT', () => {
         cy.get('#open-text-area').type('Obrigado Pela Ajuda Walmyr')
         cy.get('.button').click()
 
-        cy.get('.error').should('be.visible')
+        cy.get('.error').contains('Valide os campos obrigatórios!').should('be.visible')
     });
 
     it('preenche e limpa os campos nome, sobrenome, email e telefone', () => {
@@ -59,11 +53,11 @@ describe('Central de Atendimento ao Cliente TAT', () => {
         cy.get('#open-text-area').clear().should('have.value', '')
         cy.get('.button').click()
 
-        cy.get('.error').should('be.visible')
+        cy.get('.error').contains('Valide os campos obrigatórios!').should('be.visible')
     });
 
     it('exibe mensagem de erro ao submeter o formulário sem preencher os campos obrigatórios', () => {
         cy.get('.button').click()
-        cy.get('.error').should('be.visible')
+        cy.get('.error').contains('Valide os campos obrigatórios!').should('be.visible')
     });
 })
