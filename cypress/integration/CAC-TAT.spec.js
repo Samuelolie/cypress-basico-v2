@@ -4,19 +4,25 @@ describe('Central de Atendimento ao Cliente TAT', () => {
     beforeEach(() => {
         cy.visit('./src/index.html')
     })
+    //EX 1
     it('Verifica o título da aplicação', () => {
 
         cy.title().should('be.equal', 'Central de Atendimento ao Cliente TAT')
     })
+    //EX 1 Extra
     it('preenche os campos obrigatórios e envia o formulário', () => {
         cy.fillMandatoryFieldsAndSubmit()
+
+        cy.get('.success').contains('Mensagem enviada com sucesso.').should('be.visible')
     });
+
+
     it('exibe mensagem de erro ao submeter o formulário com um email com formatação inválida', () => {
         cy.get('#firstName').type('nome')
         cy.get('#lastName').type('sobreNome')
         cy.get('#email').type('email#gmail.com')
         cy.get('#open-text-area').type('Obrigado Pela Ajuda Walmyr')
-        cy.get('.button').click()
+        cy.contains('button', 'Enviar').click()
 
         cy.get('.error').contains('Valide os campos obrigatórios!').should('be.visible')
     });
@@ -30,7 +36,7 @@ describe('Central de Atendimento ao Cliente TAT', () => {
         cy.get('#email').type('email@gmail.com')
         cy.get('#phone-checkbox').click()
         cy.get('#open-text-area').type('Obrigado Pela Ajuda Walmyr')
-        cy.get('.button').click()
+        cy.contains('button', 'Enviar').click()
 
         cy.get('.error').contains('Valide os campos obrigatórios!').should('be.visible')
     });
@@ -51,13 +57,47 @@ describe('Central de Atendimento ao Cliente TAT', () => {
 
         cy.get('#open-text-area').type('Obrigado Pela Ajuda Walmyr').should('have.value', 'Obrigado Pela Ajuda Walmyr')
         cy.get('#open-text-area').clear().should('have.value', '')
-        cy.get('.button').click()
+        cy.contains('button', 'Enviar').click()
 
         cy.get('.error').contains('Valide os campos obrigatórios!').should('be.visible')
     });
 
     it('exibe mensagem de erro ao submeter o formulário sem preencher os campos obrigatórios', () => {
-        cy.get('.button').click()
+        cy.contains('button', 'Enviar').click()
         cy.get('.error').contains('Valide os campos obrigatórios!').should('be.visible')
+    });
+
+    it('seleciona um produto (YouTube) por seu texto', () => {
+        cy.get('#product')
+            .select('YouTube')
+            .should('have.value', 'youtube')
+    })
+
+    it('seleciona um produto (Mentoria) por seu valor (value)', () => {
+        cy.get('#product')
+            .select('mentoria')
+            .should('have.value', 'mentoria')
+    });
+
+    it('seleciona um produto (Blog) por seu índice', () => {
+        cy.get('#product')
+            .select(1)
+            .should('have.value', 'blog')
+    });
+
+    it('marca o tipo de atendimento "Feedback"', () => {
+        cy.get('input[type="radio"][value="feedback"]')
+            .check()
+            .should('have.value', 'feedback')
+    });
+
+    it('marca cada tipo de atendimento', () => {
+        cy.get('input[type="radio"]')
+            .should('have.length', 3)
+            .each(($radio) => {
+                cy.wrap($radio).check()
+                cy.wrap($radio).should('be.checked')
+            })
+
     });
 })

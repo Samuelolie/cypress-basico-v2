@@ -1,9 +1,8 @@
 Cypress.Commands.add('fillMandatoryFieldsAndSubmit', () => {
+    const longText = 'teste ,teste, teste ,teste , teste ,teste , teste ,teste , teste ,teste , teste ,teste , teste ,teste , teste ,teste , teste ,teste , teste ,teste'
     cy.get('#firstName').type('nome')
     cy.get('#lastName').type('sobreNome')
     cy.get('#email').type('email@gmail.com')
-    cy.get('#open-text-area').type('Obrigado Pela Ajuda Walmyr')
-    cy.get('.button').click()
-
-    cy.get('.success').contains('Mensagem enviada com sucesso.').should('be.visible')
+    cy.get('#open-text-area').type(longText, { delay: 0 })
+    cy.contains('button', 'Enviar').click()
 })
