@@ -34,7 +34,7 @@ describe('Central de Atendimento ao Cliente TAT', () => {
         cy.get('#firstName').type('nome')
         cy.get('#lastName').type('sobreNome')
         cy.get('#email').type('email@gmail.com')
-        cy.get('#phone-checkbox').click()
+        cy.get('#phone-checkbox').check()
         cy.get('#open-text-area').type('Obrigado Pela Ajuda Walmyr')
         cy.contains('button', 'Enviar').click()
 
@@ -97,6 +97,43 @@ describe('Central de Atendimento ao Cliente TAT', () => {
             .each(($radio) => {
                 cy.wrap($radio).check()
                 cy.wrap($radio).should('be.checked')
+            })
+    });
+
+    it('marca ambos checkboxes, depois desmarca o último', () => {
+        cy.get('input[type="checkbox"]')
+            .check()
+            .should('be.checked')
+            .last()
+            .uncheck()
+            .should('not.be.checked')
+    });
+
+    it('seleciona um arquivo da pasta fixtures', () => {
+        cy.get('input[type="file"]#file-upload')
+            .should('not.have.value')
+            .selectFile('./cypress/fixtures/example.json')
+            .should(function (input) {
+                expect(input[0].files[0].name).to.be.equal('example.json')
+            })
+
+    });
+
+    it('seleciona um arquivo simulando um drag-and-drop', () => {
+        cy.get('input[type="file"]#file-upload')
+            .should('not.have.value')
+            .selectFile('./cypress/fixtures/example.json', { action: "drag-drop" })
+            .should(function (input) {
+                expect(input[0].files[0].name).to.be.equal('example.json')
+            })
+    });
+
+    it.only('seleciona um arquivo utilizando uma fixture para a qual foi dada um alias', () => {
+        cy.fixture("example").as('file')
+        cy.get('input[type="file"]#file-upload')
+            .selectFile('@file')
+            .should(function (input) {
+                expect(input[0].files[0].name).to.be.equal('example.json')
             })
 
     });
